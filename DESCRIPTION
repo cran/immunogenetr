@@ -1,7 +1,7 @@
 Type: Package
 Package: immunogenetr
 Title: A Comprehensive Toolkit for Clinical HLA Informatics
-Version: 0.3.1
+Version: 1.0.0
 Authors@R: c(
     person("Nicholas", "Brown", , "nicholas.brown@pennmedicine.upenn.edu", role = c("cre", "aut"),
            comment = c(ORCID = "0000-0002-0046-2315")),
@@ -14,8 +14,10 @@ License: GPL (>= 3)
 URL: https://github.com/k96nb01/immunogenetr_package
 BugReports: https://github.com/k96nb01/immunogenetr_package/issues
 Depends: R (>= 4.1.0)
-Imports: cli, dplyr, glue, magrittr, purrr, rlang, stringr, tibble,
-        tidyr, tidyselect, xml2
+Imports: cli (>= 1.0.0), dplyr (>= 1.1.1), glue (>= 1.8.0), magrittr
+        (>= 2.0.3), purrr (>= 1.0.2), rlang (>= 1.1.2), stringr (>=
+        1.5.0), tibble (>= 3.1.3), tidyr (>= 1.3.0), tidyselect (>=
+        1.2.0), xml2 (>= 1.3.6)
 Suggests: testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Encoding: UTF-8
@@ -23,9 +25,9 @@ Language: en-US
 LazyData: true
 RoxygenNote: 7.3.2
 NeedsCompilation: no
-Packaged: 2025-06-24 21:40:31 UTC; drnic
+Packaged: 2025-08-19 14:26:47 UTC; drnic
 Author: Nicholas Brown [cre, aut] (ORCID:
     <https://orcid.org/0000-0002-0046-2315>),
   Busra Coskun [aut] (ORCID: <https://orcid.org/0009-0008-6828-3453>)
 Repository: CRAN
-Date/Publication: 2025-06-25 12:00:13 UTC
+Date/Publication: 2025-08-19 15:30:08 UTC
