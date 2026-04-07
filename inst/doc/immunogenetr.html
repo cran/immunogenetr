@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Getting Started with immunogenetr</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Getting Started with immunogenetr</h1>
+
+
+
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>immunogenetr is a comprehensive toolkit for clinical HLA informatics,
+built on tidyverse principles. It uses the genotype list string (GL
+string, <a href="https://glstring.org/" class="uri">https://glstring.org/</a>) as its core data structure for
+storing and computing HLA genotype data.</p>
+<p>This vignette walks through the main workflows:</p>
+<ol style="list-style-type: decimal">
+<li>Converting tabular HLA data to GL strings</li>
+<li>Splitting GL strings back into individual loci</li>
+<li>Calculating mismatches between recipient and donor</li>
+<li>Summarizing HLA matching for transplantation</li>
+<li>Working with HLA allele names (truncation, prefixes, regex)</li>
+<li>Reading HML files</li>
+</ol>
+</div>
+<div id="setup" class="section level2">
+<h2>Setup</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(immunogenetr)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div>
+</div>
+<div id="converting-tabular-hla-data-to-gl-strings" class="section level2">
+<h2>Converting tabular HLA data to GL strings</h2>
+<p>Clinical HLA data is typically stored in a tabular format, with each
+allele in its own column. immunogenetr includes the
+<code>HLA_typing_1</code> dataset as an example:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># HLA_typing_1 contains typing for 10 individuals across all classical HLA loci.</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">head</span>(HLA_typing_1, <span class="dv">3</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 19</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;   patient A1      A2     C1    C2    B1    B2    DRB345_1 DRB345_2 DRB1_1 DRB1_2</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt;     &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt; </span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; 1       1 A*24:02 A*29:… C*07… C*16… B*44… B*44… DRB5*01… DRB5*01… DRB1*… DRB1*…</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; 2       2 A*02:01 A*11:… C*07… C*07… B*07… B*08… DRB3*01… DRB4*01… DRB1*… DRB1*…</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; 3       3 A*02:01 A*26:… C*02… C*03… B*27… B*54… DRB3*02… DRB4*01… DRB1*… DRB1*…</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; # ℹ 8 more variables: DQA1_1 &lt;chr&gt;, DQA1_2 &lt;chr&gt;, DQB1_1 &lt;chr&gt;, DQB1_2 &lt;chr&gt;,</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="co">#&gt; #   DPA1_1 &lt;chr&gt;, DPA1_2 &lt;chr&gt;, DPB1_1 &lt;chr&gt;, DPB1_2 &lt;chr&gt;</span></span></code></pre></div>
+<p>The <code>HLA_columns_to_GLstring()</code> function converts these
+columns into a single GL string per individual. When used inside
+<code>mutate()</code>, pass <code>.</code> as the first argument to
+reference the working data frame:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>HLA_typing_GL <span class="ot">&lt;-</span> HLA_typing_1 <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="co"># Convert all typing columns (A1 through DPB1_2) into a GL string.</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>    <span class="at">GL_string =</span> <span class="fu">HLA_columns_to_GLstring</span>(., <span class="at">HLA_typing_columns =</span> A1<span class="sc">:</span>DPB1_2),</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>    <span class="at">.after =</span> patient</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  <span class="co"># Keep only patient ID and the new GL string column.</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>  <span class="fu">select</span>(patient, GL_string)</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co"># View the GL strings.</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>(HLA_typing_GL)</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="co">#&gt; # A tibble: 10 × 2</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt;    patient GL_string                                                            </span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="co">#&gt;      &lt;int&gt; &lt;chr&gt;                                                                </span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt;  1       1 HLA-A*24:02+HLA-A*29:02^HLA-C*07:04+HLA-C*16:01^HLA-B*44:02+HLA-B*44…</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="co">#&gt;  2       2 HLA-A*02:01+HLA-A*11:05^HLA-C*07:01+HLA-C*07:02^HLA-B*07:02+HLA-B*08…</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt;  3       3 HLA-A*02:01+HLA-A*26:18^HLA-C*02:02+HLA-C*03:04^HLA-B*27:05+HLA-B*54…</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="co">#&gt;  4       4 HLA-A*29:02+HLA-A*30:02^HLA-C*06:02+HLA-C*07:01^HLA-B*08:01+HLA-B*13…</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt;  5       5 HLA-A*02:05+HLA-A*24:02^HLA-C*07:18+HLA-C*12:03^HLA-B*35:03+HLA-B*58…</span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="co">#&gt;  6       6 HLA-A*01:01+HLA-A*24:02^HLA-C*07:01+HLA-C*14:02^HLA-B*49:01+HLA-B*51…</span></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="co">#&gt;  7       7 HLA-A*03:01+HLA-A*03:01^HLA-C*03:03+HLA-C*16:01^HLA-B*15:01+HLA-B*51…</span></span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="co">#&gt;  8       8 HLA-A*01:01+HLA-A*32:01^HLA-C*06:02+HLA-C*07:02^HLA-B*08:01+HLA-B*37…</span></span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="co">#&gt;  9       9 HLA-A*03:01+HLA-A*30:01^HLA-C*07:02+HLA-C*12:03^HLA-B*07:02+HLA-B*38…</span></span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co">#&gt; 10      10 HLA-A*02:05+HLA-A*11:01^HLA-C*07:18+HLA-C*16:02^HLA-B*51:01+HLA-B*58…</span></span></code></pre></div>
+<p>Each GL string encodes the full genotype: alleles within a gene copy
+are separated by <code>/</code> (ambiguity), gene copies by
+<code>+</code>, and loci by <code>^</code>.</p>
+</div>
+<div id="splitting-gl-strings-into-loci" class="section level2">
+<h2>Splitting GL strings into loci</h2>
+<p>To go the other direction, <code>GLstring_genes()</code> splits a GL
+string back into separate columns by locus:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Take the first patient&#39;s GL string and split it into locus columns.</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co"># Note: GLstring_genes and GLstring_genes_expanded use pivot_longer on all</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co"># columns, so only pass the GL string column (no other data types).</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>single_patient <span class="ot">&lt;-</span> HLA_typing_GL[<span class="dv">1</span>, <span class="st">&quot;GL_string&quot;</span>, drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="fu">GLstring_genes</span>(single_patient, <span class="st">&quot;GL_string&quot;</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; # A tibble: 1 × 9</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt;   HLA_A        HLA_C HLA_B HLA_DRB5 HLA_DRB1 HLA_DQA1 HLA_DQB1 HLA_DPA1 HLA_DPB1</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;   </span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; 1 HLA-A*24:02… HLA-… HLA-… HLA-DRB… HLA-DRB… HLA-DQA… HLA-DQB… HLA-DPA… HLA-DPB…</span></span></code></pre></div>
+<p>For a fully expanded view with one allele per row, use
+<code>GLstring_genes_expanded()</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">GLstring_genes_expanded</span>(single_patient, <span class="st">&quot;GL_string&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 2 × 9</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt;   A           C           B           DRB5         DRB1  DQA1  DQB1  DPA1  DPB1 </span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;       &lt;chr&gt;        &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; 1 HLA-A*24:02 HLA-C*07:04 HLA-B*44:02 HLA-DRB5*01… HLA-… HLA-… HLA-… HLA-… HLA-…</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; 2 HLA-A*29:02 HLA-C*16:01 HLA-B*44:03 HLA-DRB5*01… HLA-… HLA-… HLA-… HLA-… HLA-…</span></span></code></pre></div>
+</div>
+<div id="calculating-hla-mismatches" class="section level2">
+<h2>Calculating HLA mismatches</h2>
+<p>The mismatch functions are the core of immunogenetr. They all take a
+recipient GL string, a donor GL string, one or more loci, and a
+direction.</p>
+<p>Let’s set up a recipient/donor pair:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Patient 7 is the recipient, patient 9 is the donor.</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>recip_gl <span class="ot">&lt;-</span> HLA_typing_GL <span class="sc">%&gt;%</span> <span class="fu">filter</span>(patient <span class="sc">==</span> <span class="dv">7</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(GL_string)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>donor_gl <span class="ot">&lt;-</span> HLA_typing_GL <span class="sc">%&gt;%</span> <span class="fu">filter</span>(patient <span class="sc">==</span> <span class="dv">9</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(GL_string)</span></code></pre></div>
+<div id="is-there-a-mismatch-hla_mismatch_logical" class="section level3">
+<h3>Is there a mismatch? (<code>HLA_mismatch_logical</code>)</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Check if there is an HLA-A mismatch in the graft-vs-host direction.</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">HLA_mismatch_logical</span>(recip_gl, donor_gl, <span class="st">&quot;HLA-A&quot;</span>, <span class="at">direction =</span> <span class="st">&quot;GvH&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co"># Check host-vs-graft direction.</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="fu">HLA_mismatch_logical</span>(recip_gl, donor_gl, <span class="st">&quot;HLA-A&quot;</span>, <span class="at">direction =</span> <span class="st">&quot;HvG&quot;</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+</div>
+<div id="how-many-mismatches-hla_mismatch_number" class="section level3">
+<h3>How many mismatches? (<code>HLA_mismatch_number</code>)</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Count bidirectional mismatches across several loci at once.</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">HLA_mismatch_number</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  recip_gl, donor_gl,</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">&quot;HLA-A&quot;</span>, <span class="st">&quot;HLA-B&quot;</span>, <span class="st">&quot;HLA-C&quot;</span>, <span class="st">&quot;HLA-DRB1&quot;</span>),</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="at">direction =</span> <span class="st">&quot;bidirectional&quot;</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>)</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; [1] &quot;HLA-A=1, HLA-B=2, HLA-C=2, HLA-DRB1=2&quot;</span></span></code></pre></div>
+</div>
+<div id="which-alleles-are-mismatched-hla_mismatched_alleles" class="section level3">
+<h3>Which alleles are mismatched?
+(<code>HLA_mismatched_alleles</code>)</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># Identify the specific mismatched alleles in the HvG direction.</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">HLA_mismatched_alleles</span>(recip_gl, donor_gl, <span class="st">&quot;HLA-A&quot;</span>, <span class="at">direction =</span> <span class="st">&quot;HvG&quot;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;HLA-A*30:01&quot;</span></span></code></pre></div>
+</div>
+<div id="match-count-hla_match_number" class="section level3">
+<h3>Match count (<code>HLA_match_number</code>)</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Count the number of matches (complement of mismatches).</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">HLA_match_number</span>(</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  recip_gl, donor_gl,</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">&quot;HLA-A&quot;</span>, <span class="st">&quot;HLA-B&quot;</span>, <span class="st">&quot;HLA-C&quot;</span>, <span class="st">&quot;HLA-DRB1&quot;</span>),</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="at">direction =</span> <span class="st">&quot;bidirectional&quot;</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>)</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; [1] &quot;HLA-A=1, HLA-B=0, HLA-C=0, HLA-DRB1=0&quot;</span></span></code></pre></div>
+</div>
+</div>
+<div id="hla-match-summaries-for-transplantation" class="section level2">
+<h2>HLA match summaries for transplantation</h2>
+<p>The <code>HLA_match_summary_HCT()</code> function provides standard
+match grades used in hematopoietic cell transplantation:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># X-of-8 matching (A, B, C, DRB1 bidirectional).</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">HLA_match_summary_HCT</span>(recip_gl, donor_gl,</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="at">direction =</span> <span class="st">&quot;bidirectional&quot;</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  <span class="at">match_grade =</span> <span class="st">&quot;Xof8&quot;</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>)</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="co"># X-of-10 matching (adds DQB1).</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="fu">HLA_match_summary_HCT</span>(recip_gl, donor_gl,</span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>  <span class="at">direction =</span> <span class="st">&quot;bidirectional&quot;</span>,</span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>  <span class="at">match_grade =</span> <span class="st">&quot;Xof10&quot;</span></span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a>)</span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="co">#&gt; [1] 1</span></span></code></pre></div>
+<div id="finding-the-best-donor" class="section level3">
+<h3>Finding the best donor</h3>
+<p>A common workflow is comparing one recipient against multiple
+potential donors:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># Patient 3 is the recipient; compare against all 10 donors.</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>recipient <span class="ot">&lt;-</span> HLA_typing_GL <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  <span class="fu">filter</span>(patient <span class="sc">==</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  <span class="fu">select</span>(GL_string) <span class="sc">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">GL_string_recip =</span> GL_string)</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>donors <span class="ot">&lt;-</span> HLA_typing_GL <span class="sc">%&gt;%</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">GL_string_donor =</span> GL_string, <span class="at">donor =</span> patient) <span class="sc">%&gt;%</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>  <span class="co"># Cross-join to pair recipient with each donor.</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>  <span class="fu">cross_join</span>(recipient) <span class="sc">%&gt;%</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>  <span class="co"># Calculate 8/8 match grade for each pair.</span></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a>    <span class="at">match_8of8 =</span> <span class="fu">HLA_match_summary_HCT</span>(</span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a>      GL_string_recip, GL_string_donor,</span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a>      <span class="at">direction =</span> <span class="st">&quot;bidirectional&quot;</span>,</span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a>      <span class="at">match_grade =</span> <span class="st">&quot;Xof8&quot;</span></span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a>    ),</span>
+<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a>    <span class="at">.after =</span> donor</span>
+<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a>  <span class="co"># Sort best matches first.</span></span>
+<span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(match_8of8))</span>
+<span id="cb12-22"><a href="#cb12-22" tabindex="-1"></a></span>
+<span id="cb12-23"><a href="#cb12-23" tabindex="-1"></a>donors <span class="sc">%&gt;%</span> <span class="fu">select</span>(donor, match_8of8)</span>
+<span id="cb12-24"><a href="#cb12-24" tabindex="-1"></a><span class="co">#&gt; # A tibble: 10 × 2</span></span>
+<span id="cb12-25"><a href="#cb12-25" tabindex="-1"></a><span class="co">#&gt;    donor match_8of8</span></span>
+<span id="cb12-26"><a href="#cb12-26" tabindex="-1"></a><span class="co">#&gt;    &lt;int&gt;      &lt;int&gt;</span></span>
+<span id="cb12-27"><a href="#cb12-27" tabindex="-1"></a><span class="co">#&gt;  1     3          8</span></span>
+<span id="cb12-28"><a href="#cb12-28" tabindex="-1"></a><span class="co">#&gt;  2     2          1</span></span>
+<span id="cb12-29"><a href="#cb12-29" tabindex="-1"></a><span class="co">#&gt;  3     5          1</span></span>
+<span id="cb12-30"><a href="#cb12-30" tabindex="-1"></a><span class="co">#&gt;  4     1          0</span></span>
+<span id="cb12-31"><a href="#cb12-31" tabindex="-1"></a><span class="co">#&gt;  5     4          0</span></span>
+<span id="cb12-32"><a href="#cb12-32" tabindex="-1"></a><span class="co">#&gt;  6     6          0</span></span>
+<span id="cb12-33"><a href="#cb12-33" tabindex="-1"></a><span class="co">#&gt;  7     7          0</span></span>
+<span id="cb12-34"><a href="#cb12-34" tabindex="-1"></a><span class="co">#&gt;  8     8          0</span></span>
+<span id="cb12-35"><a href="#cb12-35" tabindex="-1"></a><span class="co">#&gt;  9     9          0</span></span>
+<span id="cb12-36"><a href="#cb12-36" tabindex="-1"></a><span class="co">#&gt; 10    10          0</span></span></code></pre></div>
+</div>
+</div>
+<div id="working-with-hla-allele-names" class="section level2">
+<h2>Working with HLA allele names</h2>
+<div id="truncation" class="section level3">
+<h3>Truncation</h3>
+<p><code>HLA_truncate()</code> reduces allele resolution to a specified
+number of fields:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># Truncate a four-field allele to two fields.</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">HLA_truncate</span>(<span class="st">&quot;HLA-A*02:01:01:01&quot;</span>, <span class="at">fields =</span> <span class="dv">2</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;HLA-A*02:01&quot;</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co"># Works on full GL strings too.</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="fu">HLA_truncate</span>(<span class="st">&quot;HLA-A*02:01:01:01+HLA-A*03:01:01:02^HLA-B*07:02:01:01+HLA-B*44:02:01:01&quot;</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>  <span class="at">fields =</span> <span class="dv">2</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>)</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="co">#&gt; [1] &quot;HLA-A*02:01+HLA-A*03:01^HLA-B*07:02+HLA-B*44:02&quot;</span></span></code></pre></div>
+</div>
+<div id="prefix-management" class="section level3">
+<h3>Prefix management</h3>
+<p><code>HLA_prefix_remove()</code> and <code>HLA_prefix_add()</code>
+manage the <code>HLA-</code> and locus prefixes:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># Remove all prefixes to get just the allele fields.</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">HLA_prefix_remove</span>(<span class="st">&quot;HLA-A*02:01&quot;</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;02:01&quot;</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co"># Keep the locus designation but remove &quot;HLA-&quot;.</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="fu">HLA_prefix_remove</span>(<span class="st">&quot;HLA-A*02:01&quot;</span>, <span class="at">keep_locus =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt; [1] &quot;A*02:01&quot;</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="co"># Add the full prefix back.</span></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="fu">HLA_prefix_add</span>(<span class="st">&quot;02:01&quot;</span>, <span class="st">&quot;HLA-A*&quot;</span>)</span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a><span class="co">#&gt; [1] &quot;HLA-A*02:01&quot;</span></span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a><span class="co"># &quot;HLA-&quot; is added by default.</span></span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="fu">HLA_prefix_add</span>(<span class="st">&quot;A*02:01&quot;</span>)</span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a><span class="co">#&gt; [1] &quot;HLA-A*02:01&quot;</span></span></code></pre></div>
+</div>
+<div id="regex-for-gl-string-searching" class="section level3">
+<h3>Regex for GL string searching</h3>
+<p><code>GLstring_regex()</code> creates regex patterns that accurately
+search within GL strings, preventing partial matches across field
+boundaries:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>gl <span class="ot">&lt;-</span> <span class="st">&quot;HLA-A*02:01:01+HLA-A*68:01^HLA-B*07:01+HLA-B*15:01&quot;</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co"># A two-field search correctly matches the three-field allele.</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>pattern <span class="ot">&lt;-</span> <span class="fu">GLstring_regex</span>(<span class="st">&quot;HLA-A*02:01&quot;</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>stringr<span class="sc">::</span><span class="fu">str_detect</span>(gl, pattern)</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="co"># But won&#39;t falsely match a longer allele number.</span></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>stringr<span class="sc">::</span><span class="fu">str_detect</span>(<span class="st">&quot;HLA-A*02:149:01&quot;</span>, <span class="fu">GLstring_regex</span>(<span class="st">&quot;HLA-A*02:14&quot;</span>))</span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+</div>
+</div>
+<div id="column-name-repair" class="section level2">
+<h2>Column name repair</h2>
+<p>When working in the tidyverse, column names with dashes and asterisks
+are inconvenient. <code>HLA_column_repair()</code> converts between
+WHO-standard (<code>HLA-A*</code>) and tidyverse-friendly
+(<code>HLA_A</code>) formats:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># GLstring_genes returns tidyverse-friendly names by default.</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>repaired <span class="ot">&lt;-</span> <span class="fu">GLstring_genes</span>(single_patient, <span class="st">&quot;GL_string&quot;</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="fu">names</span>(repaired)</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;HLA_A&quot;    &quot;HLA_C&quot;    &quot;HLA_B&quot;    &quot;HLA_DRB5&quot; &quot;HLA_DRB1&quot; &quot;HLA_DQA1&quot; &quot;HLA_DQB1&quot;</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="co">#&gt; [8] &quot;HLA_DPA1&quot; &quot;HLA_DPB1&quot;</span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="co"># Convert back to WHO format with asterisks.</span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>who_names <span class="ot">&lt;-</span> <span class="fu">HLA_column_repair</span>(repaired, <span class="at">format =</span> <span class="st">&quot;WHO&quot;</span>, <span class="at">asterisk =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a><span class="fu">names</span>(who_names)</span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a><span class="co">#&gt; [1] &quot;HLA-A*&quot;    &quot;HLA-C*&quot;    &quot;HLA-B*&quot;    &quot;HLA-DRB5*&quot; &quot;HLA-DRB1*&quot; &quot;HLA-DQA1*&quot;</span></span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a><span class="co">#&gt; [7] &quot;HLA-DQB1*&quot; &quot;HLA-DPA1*&quot; &quot;HLA-DPB1*&quot;</span></span></code></pre></div>
+</div>
+<div id="reading-hml-files" class="section level2">
+<h2>Reading HML files</h2>
+<p>The <code>read_HML()</code> function extracts GL strings from HML
+(HLA Markup Language) files, which are a standard format for reporting
+HLA typing results from next-generation sequencing:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># immunogenetr ships with two example HML files.</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>hml_path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;HML_1.hml&quot;</span>, <span class="at">package =</span> <span class="st">&quot;immunogenetr&quot;</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>hml_result <span class="ot">&lt;-</span> <span class="fu">read_HML</span>(hml_path)</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>hml_result</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="co">#&gt; # A tibble: 5 × 2</span></span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="co">#&gt;   sampleID                          GL_string                                   </span></span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                             &lt;chr&gt;                                       </span></span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a><span class="co">#&gt; 1 22-03848-HLA-031722-AB-AlloSeq-EP HLA-A*33:03:01:01+HLA-A*34:02:01:01^HLA-B*1…</span></span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a><span class="co">#&gt; 2 22-03849-HLA-031722-AB-AlloSeq-EP HLA-A*23:01:01:01+HLA-A*30:01:01:01^HLA-B*5…</span></span>
+<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a><span class="co">#&gt; 3 22-03850-HLA-031722-AB-AlloSeq-EP HLA-A*02:01:01:01+HLA-A*02:01:01:01^HLA-B*3…</span></span>
+<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a><span class="co">#&gt; 4 22-03851-HLA-031722-AB-AlloSeq-EP HLA-A*02:01:01:01+HLA-A*23:01:01:01^HLA-B*4…</span></span>
+<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a><span class="co">#&gt; 5 22-03852-HLA-031722-AB-AlloSeq-EP HLA-A*33:01:01:01+HLA-A*33:03:01:01/HLA-A*3…</span></span></code></pre></div>
+</div>
+<div id="disclaimer" class="section level2">
+<h2>Disclaimer</h2>
+<p>This library is intended for research use. Any application making use
+of this package in a clinical setting will need to be independently
+validated according to local regulations.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
