@@ -1,7 +1,7 @@
 Type: Package
 Package: immunogenetr
 Title: A Comprehensive Toolkit for Clinical HLA Informatics
-Version: 1.1.0
+Version: 1.2.0
 Authors@R: c(
     person("Nicholas", "Brown", , "nicholas.brown@pennmedicine.upenn.edu", role = c("cre", "aut"),
            comment = c(ORCID = "0000-0002-0046-2315")),
@@ -27,9 +27,9 @@ Language: en-US
 LazyData: true
 RoxygenNote: 7.3.3
 NeedsCompilation: no
-Packaged: 2026-04-07 00:43:40 UTC; drnic
+Packaged: 2026-04-10 16:26:57 UTC; BrowNich
 Author: Nicholas Brown [cre, aut] (ORCID:
     <https://orcid.org/0000-0002-0046-2315>),
   Busra Coskun [aut] (ORCID: <https://orcid.org/0009-0008-6828-3453>)
 Repository: CRAN
-Date/Publication: 2026-04-07 02:10:03 UTC
+Date/Publication: 2026-04-14 09:10:02 UTC
