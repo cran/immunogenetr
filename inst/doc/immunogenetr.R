@@ -8,7 +8,7 @@ knitr::opts_chunk$set(
 # the default monospace console-style print. The kable HTML is wrapped in a
 # pandoc raw-HTML block (```{=html} ... ```) so pandoc passes the content
 # through verbatim. Without this, pandoc's markdown_in_html_blocks extension
-# re-parses the cell contents as markdown, turning "^...^" in GL strings
+# re-parses the cell contents as markdown, turning "^...^" in GL Strings
 # into <sup>...</sup>.
 knit_print.data.frame <- function(x, ...) {
   html <- as.character(knitr::kable(x, format = "html"))
@@ -28,21 +28,21 @@ head(HLA_typing_1, 3)
 
 ## -----------------------------------------------------------------------------
 HLA_typing_GL <- HLA_typing_1 %>%
-  # Convert all typing columns (A1 through DPB1_2) into a GL string.
+  # Convert all typing columns (A1 through DPB1_2) into a GL String.
   mutate(
     GL_string = HLA_columns_to_GLstring(., HLA_typing_columns = A1:DPB1_2),
     .after = patient
   ) %>%
-  # Keep only patient ID and the new GL string column.
+  # Keep only patient ID and the new GL String column.
   select(patient, GL_string)
 
-# View the GL strings.
+# View the GL Strings.
 (HLA_typing_GL)
 
 ## -----------------------------------------------------------------------------
-# Take the first patient's GL string and split it into locus columns.
+# Take the first patient's GL String and split it into locus columns.
 # Note: GLstring_genes and GLstring_genes_expanded use pivot_longer on all
-# columns, so only pass the GL string column (no other data types).
+# columns, so only pass the GL String column (no other data types).
 single_patient <- HLA_typing_GL[1, "GL_string", drop = FALSE]
 GLstring_genes(single_patient, "GL_string")
 
@@ -123,7 +123,7 @@ donors %>% select(donor, match_8of8)
 # Truncate a four-field allele to two fields.
 HLA_truncate("HLA-A*02:01:01:01", fields = 2)
 
-# Works on full GL strings too.
+# Works on full GL Strings too.
 HLA_truncate("HLA-A*02:01:01:01+HLA-A*03:01:01:02^HLA-B*07:02:01:01+HLA-B*44:02:01:01",
   fields = 2
 )
