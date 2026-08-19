@@ -361,15 +361,14 @@ storing and computing HLA genotype data.</p>
 <h2>Setup</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(immunogenetr)</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div>
-<pre><code>#&gt; Warning: package &#39;dplyr&#39; was built under R version 4.6.1</code></pre>
 </div>
 <div id="converting-tabular-hla-data-to-gl-strings" class="section level2">
 <h2>Converting tabular HLA data to GL Strings</h2>
 <p>Clinical HLA data is typically stored in a tabular format, with each
 allele in its own column. immunogenetr includes the
 <code>HLA_typing_1</code> dataset as an example:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># HLA_typing_1 contains typing for 10 individuals across all classical HLA loci.</span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">head</span>(HLA_typing_1, <span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># HLA_typing_1 contains typing for 10 individuals across all classical HLA loci.</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">head</span>(HLA_typing_1, <span class="dv">3</span>)</span></code></pre></div>
 <table>
  <thead>
   <tr>
@@ -464,17 +463,17 @@ allele in its own column. immunogenetr includes the
 columns into a single GL String per individual. When used inside
 <code>mutate()</code>, pass <code>.</code> as the first argument to
 reference the working data frame:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>HLA_typing_GL <span class="ot">&lt;-</span> HLA_typing_1 <span class="sc">%&gt;%</span></span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="co"># Convert all typing columns (A1 through DPB1_2) into a GL String.</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    <span class="at">GL_string =</span> <span class="fu">HLA_columns_to_GLstring</span>(., <span class="at">HLA_typing_columns =</span> A1<span class="sc">:</span>DPB1_2),</span>
-<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>    <span class="at">.after =</span> patient</span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="co"># Keep only patient ID and the new GL String column.</span></span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>  <span class="fu">select</span>(patient, GL_string)</span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a></span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co"># View the GL Strings.</span></span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>(HLA_typing_GL)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>HLA_typing_GL <span class="ot">&lt;-</span> HLA_typing_1 <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="co"># Convert all typing columns (A1 through DPB1_2) into a GL String.</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>    <span class="at">GL_string =</span> <span class="fu">HLA_columns_to_GLstring</span>(., <span class="at">HLA_typing_columns =</span> A1<span class="sc">:</span>DPB1_2),</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>    <span class="at">.after =</span> patient</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  <span class="co"># Keep only patient ID and the new GL String column.</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>  <span class="fu">select</span>(patient, GL_string)</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co"># View the GL Strings.</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>(HLA_typing_GL)</span></code></pre></div>
 <table>
  <thead>
   <tr>
@@ -533,11 +532,11 @@ are separated by <code>/</code> (ambiguity), gene copies by
 <h2>Splitting GL Strings into loci</h2>
 <p>To go the other direction, <code>GLstring_genes()</code> splits a GL
 String back into separate columns by locus:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Take the first patient&#39;s GL String and split it into locus columns.</span></span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co"># Note: GLstring_genes and GLstring_genes_expanded use pivot_longer on all</span></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co"># columns, so only pass the GL String column (no other data types).</span></span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>single_patient <span class="ot">&lt;-</span> HLA_typing_GL[<span class="dv">1</span>, <span class="st">&quot;GL_string&quot;</span>, drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="fu">GLstring_genes</span>(single_patient, <span class="st">&quot;GL_string&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Take the first patient&#39;s GL String and split it into locus columns.</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co"># Note: GLstring_genes and GLstring_genes_expanded use pivot_longer on all</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co"># columns, so only pass the GL String column (no other data types).</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>single_patient <span class="ot">&lt;-</span> HLA_typing_GL[<span class="dv">1</span>, <span class="st">&quot;GL_string&quot;</span>, drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="fu">GLstring_genes</span>(single_patient, <span class="st">&quot;GL_string&quot;</span>)</span></code></pre></div>
 <table>
  <thead>
   <tr>
@@ -568,7 +567,7 @@ String back into separate columns by locus:</p>
 </table>
 <p>For a fully expanded view with one allele per row, use
 <code>GLstring_genes_expanded()</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">GLstring_genes_expanded</span>(single_patient, <span class="st">&quot;GL_string&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">GLstring_genes_expanded</span>(single_patient, <span class="st">&quot;GL_string&quot;</span>)</span></code></pre></div>
 <table>
  <thead>
   <tr>
@@ -615,43 +614,43 @@ String back into separate columns by locus:</p>
 recipient GL String, a donor GL String, one or more loci, and a
 direction.</p>
 <p>Let’s set up a recipient/donor pair:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Patient 7 is the recipient, patient 9 is the donor.</span></span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>recip_gl <span class="ot">&lt;-</span> HLA_typing_GL <span class="sc">%&gt;%</span> <span class="fu">filter</span>(patient <span class="sc">==</span> <span class="dv">7</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(GL_string)</span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>donor_gl <span class="ot">&lt;-</span> HLA_typing_GL <span class="sc">%&gt;%</span> <span class="fu">filter</span>(patient <span class="sc">==</span> <span class="dv">9</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(GL_string)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Patient 7 is the recipient, patient 9 is the donor.</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>recip_gl <span class="ot">&lt;-</span> HLA_typing_GL <span class="sc">%&gt;%</span> <span class="fu">filter</span>(patient <span class="sc">==</span> <span class="dv">7</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(GL_string)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>donor_gl <span class="ot">&lt;-</span> HLA_typing_GL <span class="sc">%&gt;%</span> <span class="fu">filter</span>(patient <span class="sc">==</span> <span class="dv">9</span>) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(GL_string)</span></code></pre></div>
 <div id="is-there-a-mismatch-hla_mismatch_logical" class="section level3">
 <h3>Is there a mismatch? (<code>HLA_mismatch_logical</code>)</h3>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Check if there is an HLA-A mismatch in the graft-vs-host direction.</span></span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">HLA_mismatch_logical</span>(recip_gl, donor_gl, <span class="st">&quot;HLA-A&quot;</span>, <span class="at">direction =</span> <span class="st">&quot;GvH&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Check if there is an HLA-A mismatch in the graft-vs-host direction.</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">HLA_mismatch_logical</span>(recip_gl, donor_gl, <span class="st">&quot;HLA-A&quot;</span>, <span class="at">direction =</span> <span class="st">&quot;GvH&quot;</span>)</span></code></pre></div>
 <pre><code>#&gt; [1] FALSE</code></pre>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># Check host-vs-graft direction.</span></span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">HLA_mismatch_logical</span>(recip_gl, donor_gl, <span class="st">&quot;HLA-A&quot;</span>, <span class="at">direction =</span> <span class="st">&quot;HvG&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># Check host-vs-graft direction.</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">HLA_mismatch_logical</span>(recip_gl, donor_gl, <span class="st">&quot;HLA-A&quot;</span>, <span class="at">direction =</span> <span class="st">&quot;HvG&quot;</span>)</span></code></pre></div>
 <pre><code>#&gt; [1] TRUE</code></pre>
 </div>
 <div id="how-many-mismatches-hla_mismatch_number" class="section level3">
 <h3>How many mismatches? (<code>HLA_mismatch_number</code>)</h3>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># Count bidirectional mismatches across several loci at once.</span></span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">HLA_mismatch_number</span>(</span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  recip_gl, donor_gl,</span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">&quot;HLA-A&quot;</span>, <span class="st">&quot;HLA-B&quot;</span>, <span class="st">&quot;HLA-C&quot;</span>, <span class="st">&quot;HLA-DRB1&quot;</span>),</span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>  <span class="at">direction =</span> <span class="st">&quot;bidirectional&quot;</span></span>
-<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># Count bidirectional mismatches across several loci at once.</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">HLA_mismatch_number</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  recip_gl, donor_gl,</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">&quot;HLA-A&quot;</span>, <span class="st">&quot;HLA-B&quot;</span>, <span class="st">&quot;HLA-C&quot;</span>, <span class="st">&quot;HLA-DRB1&quot;</span>),</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>  <span class="at">direction =</span> <span class="st">&quot;bidirectional&quot;</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>#&gt; [1] &quot;HLA-A=1, HLA-B=2, HLA-C=2, HLA-DRB1=2&quot;</code></pre>
 </div>
 <div id="which-alleles-are-mismatched-hla_mismatched_alleles" class="section level3">
 <h3>Which alleles are mismatched?
 (<code>HLA_mismatched_alleles</code>)</h3>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># Identify the specific mismatched alleles in the HvG direction.</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">HLA_mismatched_alleles</span>(recip_gl, donor_gl, <span class="st">&quot;HLA-A&quot;</span>, <span class="at">direction =</span> <span class="st">&quot;HvG&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># Identify the specific mismatched alleles in the HvG direction.</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">HLA_mismatched_alleles</span>(recip_gl, donor_gl, <span class="st">&quot;HLA-A&quot;</span>, <span class="at">direction =</span> <span class="st">&quot;HvG&quot;</span>)</span></code></pre></div>
 <pre><code>#&gt; [1] &quot;HLA-A*30:01&quot;</code></pre>
 </div>
 <div id="match-count-hla_match_number" class="section level3">
 <h3>Match count (<code>HLA_match_number</code>)</h3>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># Count the number of matches (complement of mismatches).</span></span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="fu">HLA_match_number</span>(</span>
-<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>  recip_gl, donor_gl,</span>
-<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">&quot;HLA-A&quot;</span>, <span class="st">&quot;HLA-B&quot;</span>, <span class="st">&quot;HLA-C&quot;</span>, <span class="st">&quot;HLA-DRB1&quot;</span>),</span>
-<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>  <span class="at">direction =</span> <span class="st">&quot;bidirectional&quot;</span></span>
-<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># Count the number of matches (complement of mismatches).</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">HLA_match_number</span>(</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>  recip_gl, donor_gl,</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">&quot;HLA-A&quot;</span>, <span class="st">&quot;HLA-B&quot;</span>, <span class="st">&quot;HLA-C&quot;</span>, <span class="st">&quot;HLA-DRB1&quot;</span>),</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>  <span class="at">direction =</span> <span class="st">&quot;bidirectional&quot;</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>#&gt; [1] &quot;HLA-A=1, HLA-B=0, HLA-C=0, HLA-DRB1=0&quot;</code></pre>
 </div>
 </div>
@@ -659,45 +658,45 @@ direction.</p>
 <h2>HLA match summaries for transplantation</h2>
 <p>The <code>HLA_match_summary_HCT()</code> function provides standard
 match grades used in hematopoietic cell transplantation:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># X-of-8 matching (A, B, C, DRB1 bidirectional).</span></span>
-<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="fu">HLA_match_summary_HCT</span>(recip_gl, donor_gl,</span>
-<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>  <span class="at">direction =</span> <span class="st">&quot;bidirectional&quot;</span>,</span>
-<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>  <span class="at">match_grade =</span> <span class="st">&quot;Xof8&quot;</span></span>
-<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># X-of-8 matching (A, B, C, DRB1 bidirectional).</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="fu">HLA_match_summary_HCT</span>(recip_gl, donor_gl,</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>  <span class="at">direction =</span> <span class="st">&quot;bidirectional&quot;</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>  <span class="at">match_grade =</span> <span class="st">&quot;Xof8&quot;</span></span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>#&gt; [1] 1</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co"># X-of-10 matching (adds DQB1).</span></span>
-<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="fu">HLA_match_summary_HCT</span>(recip_gl, donor_gl,</span>
-<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>  <span class="at">direction =</span> <span class="st">&quot;bidirectional&quot;</span>,</span>
-<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>  <span class="at">match_grade =</span> <span class="st">&quot;Xof10&quot;</span></span>
-<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="co"># X-of-10 matching (adds DQB1).</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="fu">HLA_match_summary_HCT</span>(recip_gl, donor_gl,</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>  <span class="at">direction =</span> <span class="st">&quot;bidirectional&quot;</span>,</span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a>  <span class="at">match_grade =</span> <span class="st">&quot;Xof10&quot;</span></span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>#&gt; [1] 1</code></pre>
 <div id="finding-the-best-donor" class="section level3">
 <h3>Finding the best donor</h3>
 <p>A common workflow is comparing one recipient against multiple
 potential donors:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co"># Patient 3 is the recipient; compare against all 10 donors.</span></span>
-<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>recipient <span class="ot">&lt;-</span> HLA_typing_GL <span class="sc">%&gt;%</span></span>
-<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>  <span class="fu">filter</span>(patient <span class="sc">==</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>  <span class="fu">select</span>(GL_string) <span class="sc">%&gt;%</span></span>
-<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">GL_string_recip =</span> GL_string)</span>
-<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a></span>
-<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a>donors <span class="ot">&lt;-</span> HLA_typing_GL <span class="sc">%&gt;%</span></span>
-<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">GL_string_donor =</span> GL_string, <span class="at">donor =</span> patient) <span class="sc">%&gt;%</span></span>
-<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a>  <span class="co"># Cross-join to pair recipient with each donor.</span></span>
-<span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a>  <span class="fu">cross_join</span>(recipient) <span class="sc">%&gt;%</span></span>
-<span id="cb22-11"><a href="#cb22-11" tabindex="-1"></a>  <span class="co"># Calculate 8/8 match grade for each pair.</span></span>
-<span id="cb22-12"><a href="#cb22-12" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb22-13"><a href="#cb22-13" tabindex="-1"></a>    <span class="at">match_8of8 =</span> <span class="fu">HLA_match_summary_HCT</span>(</span>
-<span id="cb22-14"><a href="#cb22-14" tabindex="-1"></a>      GL_string_recip, GL_string_donor,</span>
-<span id="cb22-15"><a href="#cb22-15" tabindex="-1"></a>      <span class="at">direction =</span> <span class="st">&quot;bidirectional&quot;</span>,</span>
-<span id="cb22-16"><a href="#cb22-16" tabindex="-1"></a>      <span class="at">match_grade =</span> <span class="st">&quot;Xof8&quot;</span></span>
-<span id="cb22-17"><a href="#cb22-17" tabindex="-1"></a>    ),</span>
-<span id="cb22-18"><a href="#cb22-18" tabindex="-1"></a>    <span class="at">.after =</span> donor</span>
-<span id="cb22-19"><a href="#cb22-19" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb22-20"><a href="#cb22-20" tabindex="-1"></a>  <span class="co"># Sort best matches first.</span></span>
-<span id="cb22-21"><a href="#cb22-21" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(match_8of8))</span>
-<span id="cb22-22"><a href="#cb22-22" tabindex="-1"></a></span>
-<span id="cb22-23"><a href="#cb22-23" tabindex="-1"></a>donors <span class="sc">%&gt;%</span> <span class="fu">select</span>(donor, match_8of8)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co"># Patient 3 is the recipient; compare against all 10 donors.</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>recipient <span class="ot">&lt;-</span> HLA_typing_GL <span class="sc">%&gt;%</span></span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>  <span class="fu">filter</span>(patient <span class="sc">==</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>  <span class="fu">select</span>(GL_string) <span class="sc">%&gt;%</span></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">GL_string_recip =</span> GL_string)</span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>donors <span class="ot">&lt;-</span> HLA_typing_GL <span class="sc">%&gt;%</span></span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">GL_string_donor =</span> GL_string, <span class="at">donor =</span> patient) <span class="sc">%&gt;%</span></span>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a>  <span class="co"># Cross-join to pair recipient with each donor.</span></span>
+<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a>  <span class="fu">cross_join</span>(recipient) <span class="sc">%&gt;%</span></span>
+<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a>  <span class="co"># Calculate 8/8 match grade for each pair.</span></span>
+<span id="cb21-12"><a href="#cb21-12" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a>    <span class="at">match_8of8 =</span> <span class="fu">HLA_match_summary_HCT</span>(</span>
+<span id="cb21-14"><a href="#cb21-14" tabindex="-1"></a>      GL_string_recip, GL_string_donor,</span>
+<span id="cb21-15"><a href="#cb21-15" tabindex="-1"></a>      <span class="at">direction =</span> <span class="st">&quot;bidirectional&quot;</span>,</span>
+<span id="cb21-16"><a href="#cb21-16" tabindex="-1"></a>      <span class="at">match_grade =</span> <span class="st">&quot;Xof8&quot;</span></span>
+<span id="cb21-17"><a href="#cb21-17" tabindex="-1"></a>    ),</span>
+<span id="cb21-18"><a href="#cb21-18" tabindex="-1"></a>    <span class="at">.after =</span> donor</span>
+<span id="cb21-19"><a href="#cb21-19" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb21-20"><a href="#cb21-20" tabindex="-1"></a>  <span class="co"># Sort best matches first.</span></span>
+<span id="cb21-21"><a href="#cb21-21" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(match_8of8))</span>
+<span id="cb21-22"><a href="#cb21-22" tabindex="-1"></a></span>
+<span id="cb21-23"><a href="#cb21-23" tabindex="-1"></a>donors <span class="sc">%&gt;%</span> <span class="fu">select</span>(donor, match_8of8)</span></code></pre></div>
 <table>
  <thead>
   <tr>
@@ -756,30 +755,30 @@ potential donors:</p>
 <h3>Truncation</h3>
 <p><code>HLA_truncate()</code> reduces allele resolution to a specified
 number of fields:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="co"># Truncate a four-field allele to two fields.</span></span>
-<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="fu">HLA_truncate</span>(<span class="st">&quot;HLA-A*02:01:01:01&quot;</span>, <span class="at">fields =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co"># Truncate a four-field allele to two fields.</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="fu">HLA_truncate</span>(<span class="st">&quot;HLA-A*02:01:01:01&quot;</span>, <span class="at">fields =</span> <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>#&gt; [1] &quot;HLA-A*02:01&quot;</code></pre>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="co"># Works on full GL Strings too.</span></span>
-<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="fu">HLA_truncate</span>(<span class="st">&quot;HLA-A*02:01:01:01+HLA-A*03:01:01:02^HLA-B*07:02:01:01+HLA-B*44:02:01:01&quot;</span>,</span>
-<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>  <span class="at">fields =</span> <span class="dv">2</span></span>
-<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="co"># Works on full GL Strings too.</span></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="fu">HLA_truncate</span>(<span class="st">&quot;HLA-A*02:01:01:01+HLA-A*03:01:01:02^HLA-B*07:02:01:01+HLA-B*44:02:01:01&quot;</span>,</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>  <span class="at">fields =</span> <span class="dv">2</span></span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>#&gt; [1] &quot;HLA-A*02:01+HLA-A*03:01^HLA-B*07:02+HLA-B*44:02&quot;</code></pre>
 </div>
 <div id="prefix-management" class="section level3">
 <h3>Prefix management</h3>
 <p><code>HLA_prefix_remove()</code> and <code>HLA_prefix_add()</code>
 manage the <code>HLA-</code> and locus prefixes:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="co"># Remove all prefixes to get just the allele fields.</span></span>
-<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="fu">HLA_prefix_remove</span>(<span class="st">&quot;HLA-A*02:01&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="co"># Remove all prefixes to get just the allele fields.</span></span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="fu">HLA_prefix_remove</span>(<span class="st">&quot;HLA-A*02:01&quot;</span>)</span></code></pre></div>
 <pre><code>#&gt; [1] &quot;02:01&quot;</code></pre>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="co"># Keep the locus designation but remove &quot;HLA-&quot;.</span></span>
-<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a><span class="fu">HLA_prefix_remove</span>(<span class="st">&quot;HLA-A*02:01&quot;</span>, <span class="at">keep_locus =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="co"># Keep the locus designation but remove &quot;HLA-&quot;.</span></span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a><span class="fu">HLA_prefix_remove</span>(<span class="st">&quot;HLA-A*02:01&quot;</span>, <span class="at">keep_locus =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>#&gt; [1] &quot;A*02:01&quot;</code></pre>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="co"># Add the full prefix back.</span></span>
-<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a><span class="fu">HLA_prefix_add</span>(<span class="st">&quot;02:01&quot;</span>, <span class="st">&quot;HLA-A*&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co"># Add the full prefix back.</span></span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a><span class="fu">HLA_prefix_add</span>(<span class="st">&quot;02:01&quot;</span>, <span class="st">&quot;HLA-A*&quot;</span>)</span></code></pre></div>
 <pre><code>#&gt; [1] &quot;HLA-A*02:01&quot;</code></pre>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="co"># &quot;HLA-&quot; is added by default.</span></span>
-<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a><span class="fu">HLA_prefix_add</span>(<span class="st">&quot;A*02:01&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="co"># &quot;HLA-&quot; is added by default.</span></span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a><span class="fu">HLA_prefix_add</span>(<span class="st">&quot;A*02:01&quot;</span>)</span></code></pre></div>
 <pre><code>#&gt; [1] &quot;HLA-A*02:01&quot;</code></pre>
 </div>
 <div id="regex-for-gl-string-searching" class="section level3">
@@ -787,15 +786,57 @@ manage the <code>HLA-</code> and locus prefixes:</p>
 <p><code>GLstring_regex()</code> creates regex patterns that accurately
 search within GL strings, preventing partial matches across field
 boundaries:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a>gl <span class="ot">&lt;-</span> <span class="st">&quot;HLA-A*02:01:01+HLA-A*68:01^HLA-B*07:01+HLA-B*15:01&quot;</span></span>
-<span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a></span>
-<span id="cb35-3"><a href="#cb35-3" tabindex="-1"></a><span class="co"># A two-field search correctly matches the three-field allele.</span></span>
-<span id="cb35-4"><a href="#cb35-4" tabindex="-1"></a>pattern <span class="ot">&lt;-</span> <span class="fu">GLstring_regex</span>(<span class="st">&quot;HLA-A*02:01&quot;</span>)</span>
-<span id="cb35-5"><a href="#cb35-5" tabindex="-1"></a>stringr<span class="sc">::</span><span class="fu">str_detect</span>(gl, pattern)</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a>gl <span class="ot">&lt;-</span> <span class="st">&quot;HLA-A*02:01:01+HLA-A*68:01^HLA-B*07:01+HLA-B*15:01&quot;</span></span>
+<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a><span class="co"># A two-field search correctly matches the three-field allele.</span></span>
+<span id="cb34-4"><a href="#cb34-4" tabindex="-1"></a>pattern <span class="ot">&lt;-</span> <span class="fu">GLstring_regex</span>(<span class="st">&quot;HLA-A*02:01&quot;</span>)</span>
+<span id="cb34-5"><a href="#cb34-5" tabindex="-1"></a>stringr<span class="sc">::</span><span class="fu">str_detect</span>(gl, pattern)</span></code></pre></div>
 <pre><code>#&gt; [1] TRUE</code></pre>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="co"># But won&#39;t falsely match a longer allele number.</span></span>
-<span id="cb37-2"><a href="#cb37-2" tabindex="-1"></a>stringr<span class="sc">::</span><span class="fu">str_detect</span>(<span class="st">&quot;HLA-A*02:149:01&quot;</span>, <span class="fu">GLstring_regex</span>(<span class="st">&quot;HLA-A*02:14&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="co"># But won&#39;t falsely match a longer allele number.</span></span>
+<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a>stringr<span class="sc">::</span><span class="fu">str_detect</span>(<span class="st">&quot;HLA-A*02:149:01&quot;</span>, <span class="fu">GLstring_regex</span>(<span class="st">&quot;HLA-A*02:14&quot;</span>))</span></code></pre></div>
 <pre><code>#&gt; [1] FALSE</code></pre>
+<p>Expression suffixes and G/P groups are handled on a simple rule: a
+search without a suffix matches the allele regardless of expression
+status or group membership, while a search carrying a suffix matches
+only alleles with that same letter, at the same or higher resolution. A
+G or P group search matches the group name only, not its member
+alleles:</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="co"># An unsuffixed search finds the null allele.</span></span>
+<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a>stringr<span class="sc">::</span><span class="fu">str_detect</span>(<span class="st">&quot;HLA-A*24:09N+HLA-A*02:01&quot;</span>, <span class="fu">GLstring_regex</span>(<span class="st">&quot;HLA-A*24:09&quot;</span>))</span></code></pre></div>
+<pre><code>#&gt; [1] TRUE</code></pre>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="co"># A null search finds the null allele at higher resolution, but never an</span></span>
+<span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a><span class="co"># expressed allele.</span></span>
+<span id="cb40-3"><a href="#cb40-3" tabindex="-1"></a>stringr<span class="sc">::</span><span class="fu">str_detect</span>(<span class="st">&quot;HLA-A*01:01:03N&quot;</span>, <span class="fu">GLstring_regex</span>(<span class="st">&quot;HLA-A*01:01N&quot;</span>))</span></code></pre></div>
+<pre><code>#&gt; [1] TRUE</code></pre>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a>stringr<span class="sc">::</span><span class="fu">str_detect</span>(<span class="st">&quot;HLA-A*01:01:03&quot;</span>, <span class="fu">GLstring_regex</span>(<span class="st">&quot;HLA-A*01:01N&quot;</span>))</span></code></pre></div>
+<pre><code>#&gt; [1] FALSE</code></pre>
+<p>The matched text is always the full allele as it appears in the GL
+String, so <code>stringr::str_extract()</code> reports what was actually
+found:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a>stringr<span class="sc">::</span><span class="fu">str_extract</span>(gl, <span class="fu">GLstring_regex</span>(<span class="st">&quot;HLA-A*02:01&quot;</span>))</span></code></pre></div>
+<pre><code>#&gt; [1] &quot;HLA-A*02:01:01&quot;</code></pre>
+<p>The <code>HLA-</code> prefix is optional in both the allele and the
+GL String — wild-caught GL Strings often omit it — so an allele in
+either convention matches a GL String in either convention:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a>stringr<span class="sc">::</span><span class="fu">str_detect</span>(<span class="st">&quot;A*02:01:01+A*68:01&quot;</span>, <span class="fu">GLstring_regex</span>(<span class="st">&quot;HLA-A*02:01&quot;</span>))</span></code></pre></div>
+<pre><code>#&gt; [1] TRUE</code></pre>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a>stringr<span class="sc">::</span><span class="fu">str_extract</span>(gl, <span class="fu">GLstring_regex</span>(<span class="st">&quot;A*02:01&quot;</span>))</span></code></pre></div>
+<pre><code>#&gt; [1] &quot;HLA-A*02:01:01&quot;</code></pre>
+</div>
+<div id="removing-non-expressed-alleles" class="section level3">
+<h3>Removing non-expressed alleles</h3>
+<p>Because an unsuffixed search matches expression variants, workflows
+that should ignore non-expressed alleles can remove them first with
+<code>GLstring_drop_non_expressed()</code>. The default removes N, S and
+C alleles, which produce no cell-surface protein; the
+<code>suffixes</code> argument adjusts that judgement:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="co"># The null allele is removed; a gene copy or locus with nothing left collapses</span></span>
+<span id="cb50-2"><a href="#cb50-2" tabindex="-1"></a><span class="co"># cleanly.</span></span>
+<span id="cb50-3"><a href="#cb50-3" tabindex="-1"></a><span class="fu">GLstring_drop_non_expressed</span>(<span class="st">&quot;HLA-A*01:01N+HLA-A*02:01^HLA-B*07:02/HLA-B*07:02N+HLA-B*08:01&quot;</span>)</span></code></pre></div>
+<pre><code>#&gt; [1] &quot;HLA-A*02:01^HLA-B*07:02+HLA-B*08:01&quot;</code></pre>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" tabindex="-1"></a><span class="co"># Remove only null alleles.</span></span>
+<span id="cb52-2"><a href="#cb52-2" tabindex="-1"></a><span class="fu">GLstring_drop_non_expressed</span>(<span class="st">&quot;HLA-A*01:01N+HLA-A*23:38S&quot;</span>, <span class="at">suffixes =</span> <span class="st">&quot;N&quot;</span>)</span></code></pre></div>
+<pre><code>#&gt; [1] &quot;HLA-A*23:38S&quot;</code></pre>
 </div>
 </div>
 <div id="column-name-repair" class="section level2">
@@ -804,14 +845,14 @@ boundaries:</p>
 are inconvenient. <code>HLA_column_repair()</code> converts between
 WHO-standard (<code>HLA-A*</code>) and tidyverse-friendly
 (<code>HLA_A</code>) formats:</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a><span class="co"># GLstring_genes returns tidyverse-friendly names by default.</span></span>
-<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a>repaired <span class="ot">&lt;-</span> <span class="fu">GLstring_genes</span>(single_patient, <span class="st">&quot;GL_string&quot;</span>)</span>
-<span id="cb39-3"><a href="#cb39-3" tabindex="-1"></a><span class="fu">names</span>(repaired)</span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a><span class="co"># GLstring_genes returns tidyverse-friendly names by default.</span></span>
+<span id="cb54-2"><a href="#cb54-2" tabindex="-1"></a>repaired <span class="ot">&lt;-</span> <span class="fu">GLstring_genes</span>(single_patient, <span class="st">&quot;GL_string&quot;</span>)</span>
+<span id="cb54-3"><a href="#cb54-3" tabindex="-1"></a><span class="fu">names</span>(repaired)</span></code></pre></div>
 <pre><code>#&gt; [1] &quot;HLA_A&quot;    &quot;HLA_C&quot;    &quot;HLA_B&quot;    &quot;HLA_DRB5&quot; &quot;HLA_DRB1&quot; &quot;HLA_DQA1&quot; &quot;HLA_DQB1&quot;
 #&gt; [8] &quot;HLA_DPA1&quot; &quot;HLA_DPB1&quot;</code></pre>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a><span class="co"># Convert back to WHO format with asterisks.</span></span>
-<span id="cb41-2"><a href="#cb41-2" tabindex="-1"></a>who_names <span class="ot">&lt;-</span> <span class="fu">HLA_column_repair</span>(repaired, <span class="at">format =</span> <span class="st">&quot;WHO&quot;</span>, <span class="at">asterisk =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb41-3"><a href="#cb41-3" tabindex="-1"></a><span class="fu">names</span>(who_names)</span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" tabindex="-1"></a><span class="co"># Convert back to WHO format with asterisks.</span></span>
+<span id="cb56-2"><a href="#cb56-2" tabindex="-1"></a>who_names <span class="ot">&lt;-</span> <span class="fu">HLA_column_repair</span>(repaired, <span class="at">format =</span> <span class="st">&quot;WHO&quot;</span>, <span class="at">asterisk =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb56-3"><a href="#cb56-3" tabindex="-1"></a><span class="fu">names</span>(who_names)</span></code></pre></div>
 <pre><code>#&gt; [1] &quot;HLA-A*&quot;    &quot;HLA-C*&quot;    &quot;HLA-B*&quot;    &quot;HLA-DRB5*&quot; &quot;HLA-DRB1*&quot; &quot;HLA-DQA1*&quot;
 #&gt; [7] &quot;HLA-DQB1*&quot; &quot;HLA-DPA1*&quot; &quot;HLA-DPB1*&quot;</code></pre>
 </div>
@@ -820,10 +861,10 @@ WHO-standard (<code>HLA-A*</code>) and tidyverse-friendly
 <p>The <code>read_HML()</code> function extracts GL Strings from HML
 (HLA Markup Language) files, which are a standard format for reporting
 HLA typing results from next-generation sequencing:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a><span class="co"># immunogenetr ships with two example HML files.</span></span>
-<span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a>hml_path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;HML_1.hml&quot;</span>, <span class="at">package =</span> <span class="st">&quot;immunogenetr&quot;</span>)</span>
-<span id="cb43-3"><a href="#cb43-3" tabindex="-1"></a>hml_result <span class="ot">&lt;-</span> <span class="fu">read_HML</span>(hml_path)</span>
-<span id="cb43-4"><a href="#cb43-4" tabindex="-1"></a>hml_result</span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a><span class="co"># immunogenetr ships with two example HML files.</span></span>
+<span id="cb58-2"><a href="#cb58-2" tabindex="-1"></a>hml_path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;HML_1.hml&quot;</span>, <span class="at">package =</span> <span class="st">&quot;immunogenetr&quot;</span>)</span>
+<span id="cb58-3"><a href="#cb58-3" tabindex="-1"></a>hml_result <span class="ot">&lt;-</span> <span class="fu">read_HML</span>(hml_path)</span>
+<span id="cb58-4"><a href="#cb58-4" tabindex="-1"></a>hml_result</span></code></pre></div>
 <table>
  <thead>
   <tr>

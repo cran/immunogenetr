@@ -152,6 +152,30 @@ stringr::str_detect(gl, pattern)
 stringr::str_detect("HLA-A*02:149:01", GLstring_regex("HLA-A*02:14"))
 
 ## -----------------------------------------------------------------------------
+# An unsuffixed search finds the null allele.
+stringr::str_detect("HLA-A*24:09N+HLA-A*02:01", GLstring_regex("HLA-A*24:09"))
+
+# A null search finds the null allele at higher resolution, but never an
+# expressed allele.
+stringr::str_detect("HLA-A*01:01:03N", GLstring_regex("HLA-A*01:01N"))
+stringr::str_detect("HLA-A*01:01:03", GLstring_regex("HLA-A*01:01N"))
+
+## -----------------------------------------------------------------------------
+stringr::str_extract(gl, GLstring_regex("HLA-A*02:01"))
+
+## -----------------------------------------------------------------------------
+stringr::str_detect("A*02:01:01+A*68:01", GLstring_regex("HLA-A*02:01"))
+stringr::str_extract(gl, GLstring_regex("A*02:01"))
+
+## -----------------------------------------------------------------------------
+# The null allele is removed; a gene copy or locus with nothing left collapses
+# cleanly.
+GLstring_drop_non_expressed("HLA-A*01:01N+HLA-A*02:01^HLA-B*07:02/HLA-B*07:02N+HLA-B*08:01")
+
+# Remove only null alleles.
+GLstring_drop_non_expressed("HLA-A*01:01N+HLA-A*23:38S", suffixes = "N")
+
+## -----------------------------------------------------------------------------
 # GLstring_genes returns tidyverse-friendly names by default.
 repaired <- GLstring_genes(single_patient, "GL_string")
 names(repaired)
